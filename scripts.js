@@ -1,3 +1,5 @@
+let zip;
+
 document.getElementById('randomize').addEventListener('click', () => {
     let nameList = document.getElementById('nameList').value.split('\n').filter(name => name.trim() !== '');
     for (let i = nameList.length - 1; i > 0; i--) {
@@ -18,7 +20,7 @@ document.getElementById('run').addEventListener('click', () => {
         return;
     }
 
-    const zip = new JSZip();
+    zip = new JSZip();  // Initialize zip here
     const fileListDiv = document.getElementById('fileList');
     const fileCountDiv = document.getElementById('fileCount');
     fileListDiv.innerHTML = '';  // Clear the file list
@@ -38,12 +40,14 @@ document.getElementById('run').addEventListener('click', () => {
     fileCountDiv.style.display = 'block';
     fileCountDiv.textContent = `File Count: ${fileCount}`;
     document.getElementById('download').style.display = 'block';
+});
 
-    document.getElementById('download').addEventListener('click', () => {
+document.getElementById('download').addEventListener('click', () => {
+    if (zip) {
         zip.generateAsync({ type: 'blob' }).then(content => {
             saveAs(content, 'name_list.zip');
         });
-    });
+    }
 });
 
 document.getElementById('reset').addEventListener('click', () => {
